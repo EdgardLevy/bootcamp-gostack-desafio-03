@@ -1,0 +1,263 @@
+instalacao dos pacotes
+yarn add express sequelize bcryptjs jsonwebtoken pg pg-hstore yup
+
+instalacao dos pacotes de desenvolvimento
+yarn add sequelize-cli sucrase nodemon eslint prettier eslint-config-airbnb-base eslint-config-prettier eslint-plugin-import eslint-plugin-prettier -D
+
+configuracao do eslint
+yarn eslint ——init
+How would you like to use ESLint? > ❯ To check syntax, find problems, and enforce code style 
+What type of modules does your project use? ❯ JavaScript modules (import/export) 
+Which framework does your project use? ❯ None of these 
+Does your project use TypeScript? N
+Where does your code run? Node
+How would you like to define a style for your project? ❯ Use a popular style guide 
+Which style guide do you want to follow? ❯ Airbnb (https://github.com/airbnb/javascript) 
+What format do you want your config file to be in? ❯ JavaScript 
+
+eslint-config-airbnb-base@latest eslint@^5.16.0 || ^6.1.0 eslint-plugin-import@^2.18.2
+? Would you like to install them now with npm? (Y/n) Y
+
+para atualizar o yarn.lock execute
+yarn
+
+clique com o botao direito, na arvore de arquivos sem selecionar nenhum arquivo, e depois clique no menu ‘Generate .editorconfig’
+
+altere no arquivo .editorconfig
+trim_trailing_whitespace = true
+insert_final_newline = false
+
+no arquivo .eslintrc.js altere
+
+adicione ‘prettier’ em extends
+ extends: [
+    …, 'prettier'
+  ],
+
+adicione o plugin ‘prettier’
+  plugins: ['prettier'],
+
+em rules, adicione
+
+rules: {
+    "prettier/prettier": "error",
+    "class-methods-use-this": "off",
+    "no-param-reassign": "off",
+    "camelcase": "off",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "next" }]
+  },
+
+/*
+extends
+  airbnb-base = estilizacao do airbnb
+  prettier = modulo para arrumar o codigo
+plugins
+  prettier = modulo para arrumar o codigo
+rules
+  "class-methods-use-this": "off", = desabilita a checagem de uso do this nos metodos de classe
+  "no-param-reassign": "off" = permite receber o parametro e alterar ele, o padrao do eslint eh nao permitir isso
+  "camelcase": "off" = o eslint pede por padrao que todas as variaveis sejam camelcase
+  "no-unused-vars": ["error", { "argsIgnorePattern": "next" }] = permitir declaracao de variaveis sem uso
+  "prettier/prettier": "error" = configuracao das validacoes do prettier
+*/
+
+crie o arquivo de configuracao .prettierrc e inclua
+{
+  "singleQuote": true,
+  "trailingComma": "es5"
+}
+
+
+crie o arquivo de configuracao nodemon.json e inclua a configuracao
+{
+  "execMap": {
+    "js": "node -r sucrase/register"
+  }
+}
+  ou seja, toda vez que o nodemon executar, ele vai registrar o sucrase
+
+crie os arquivos 
+/src
+  server.js
+  app.js
+  routes.js
+  /config
+    database.js
+  /database
+    index.js
+
+
+para executar eslint+prettier em todos os arquivos de uma soh vez
+execute
+yarn eslint --fix src --ext .js
+
+em ‘debug’ adiciolne a configuracao do node e altere
+"configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Launch Program",
+      "protocol": "inspector",
+      "restart": true
+    }
+  ]
+
+no arquivo package.json adicione os scripts
+
+"scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "dev:debug": "nodemon --inspect src/server.js"
+  },
+
+cria a estrutura de pastas
+src
+  app
+    controllers
+    middlewares
+    models
+  config
+  database
+    migrationsmigra
+  
+
+crie o arquivo .sequelizerc e defina os caminhos que o sequelize ira usar
+
+const { resolve } = require('path')
+//configure paths to sequelize
+module.exports = {
+  //path to connection configuration
+  config: resolve(__dirname, 'src', 'config', 'database.js'),
+  'models-path': resolve(__dirname, 'src', 'app', 'models'),
+  'migrations-path': resolve(__dirname, 'src', 'database', 'migrations'),
+  'seeders-path': resolve(__dirname, 'src', 'database', 'seeds')
+
+}
+
+crie o migration da tabela de usuarios executando
+yarn sequelize migration:create --name=create-users
+no metodo up configure 
+up: (queryInterface, Sequelize) => {
+    return queryInterface.createTable('users', {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+    });
+  },
+
+crie o arquivo app/models/Users.js
+
+import Sequelize, { Model } from 'sequelize';
+
+import bcrypt from 'bcryptjs';
+
+class User extends Model {
+  static init(sequelize) {
+    super.init(
+      {
+        name: Sequelize.STRING,
+        email: Sequelize.STRING,
+        password_hash: Sequelize.STRING,
+        password: Sequelize.VIRTUAL,
+      },
+      {
+        sequelize,
+      }
+    );
+    // when password field is assigned, create hash of password using bcrypt
+    this.addHook('beforeSave', async user => {
+      if (user.password) {
+        user.password_hash = await bcrypt.hash(user.password, 8);
+      }
+    });
+
+    return this;
+  }
+
+  // method to compare password param with actual password
+  checkPassword(password) {
+    return bcrypt.compare(password, this.password_hash);
+  }
+}
+
+export default User;
+
+configure o arquivo /database/index.js
+import Sequelize from 'sequelize';
+import User from '../app/models/User';
+import databaseConfig from '../config/database';
+
+const models = [User];
+// create class to handle connection and start connection
+class Database {
+  constructor() {
+    this.init();
+  }
+
+  init() {
+    // create connection with configuration
+    this.connection = new Sequelize(databaseConfig);
+    // assing connection to models
+    models.map(model => model.init(this.connection));
+  }
+}
+
+export default new Database();
+
+
+
+para executar o migration e criar os campos e a tabela, execute
+yarn sequelize db:migrate
+para dar um rollback se necessario execute
+yarn sequelize db:migrate:undo:all
+
+crie um seed de usuario
+yarn sequelize seed:generate --name admin-user
+altere o arquivo seed criado
+
+const bcrypt = require('bcryptjs');
+
+module.exports = {
+  up: QueryInterface => {
+    return QueryInterface.bulkInsert(
+      'users',
+      [
+        {
+          name: 'Administrador',
+          email: 'admin@gympoint.com',
+          password_hash: bcrypt.hashSync('123456', 8),
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      ],
+      {}
+    );
+  },
+
+  down: queryInterface => {
+    return queryInterface.bulkDelete('users', null, {});
+  },
+};
+
+execute 
+yarn sequelize db:seed:all
