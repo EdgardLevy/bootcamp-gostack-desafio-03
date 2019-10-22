@@ -3,6 +3,7 @@ import Router from 'express';
 import SessionController from './app/controllers/SessionController';
 import StudentController from './app/controllers/StudentController';
 import PlanController from './app/controllers/PlanController';
+import SubscriptionController from './app/controllers/SubscriptionController';
 import authMiddleware from './app/middlewares/auth';
 
 const routes = new Router();
@@ -23,5 +24,12 @@ routes.get('/plans', PlanController.index);
 routes.get('/plans/:id', PlanController.show);
 routes.put('/plans/:id', PlanController.update);
 routes.delete('/plans/:id', PlanController.delete);
+
+routes.post('/subscriptions', SubscriptionController.store);
+routes.get('/subscriptions', SubscriptionController.index);
+routes.get('/subscriptions/:id', SubscriptionController.show);
+routes.put('/subscriptions/:id', SubscriptionController.update);
+routes.delete('/subscriptions/:id', SubscriptionController.delete);
+
 // module.exports = routes;
 export default routes;

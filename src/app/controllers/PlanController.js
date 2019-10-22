@@ -94,9 +94,7 @@ class PlanController {
 
   async delete(req, res) {
     const schema = Yup.object().shape({
-      id: Yup.number()
-        .positive()
-        .min(1),
+      id: Yup.number().required(),
     });
     const { id } = req.params;
     // validate schema and return all errors messages if need
@@ -104,6 +102,12 @@ class PlanController {
       await schema.validate({ id }, { abortEarly: false });
     } catch (error) {
       return res.status(400).json({ errors: error.errors });
+    }
+
+    const plan = await Plan.findByPk(id);
+
+    if (!plan) {
+      return res.status(400).json({ error: 'Plan does not exists' });
     }
 
     await Plan.destroy({ where: { id } });
