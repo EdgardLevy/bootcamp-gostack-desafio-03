@@ -5,7 +5,7 @@ import Plan from '../models/Plan';
 class PlanController {
   async index(req, res) {
     const plans = await Plan.findAll({
-      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      attributes: { exclude: ['created_at', 'updated_at'] },
     });
     return res.json(plans);
   }
@@ -13,7 +13,7 @@ class PlanController {
   async show(req, res) {
     const { id } = req.params;
     const plan = await Plan.findByPk(id, {
-      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      attributes: { exclude: ['created_at', 'updated_at'] },
     });
     return res.json(plan);
   }

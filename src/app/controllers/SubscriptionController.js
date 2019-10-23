@@ -4,6 +4,8 @@ import Subscription from '../models/Subscription';
 import User from '../models/User';
 import Plan from '../models/Plan';
 import Student from '../models/Student';
+import SubscriptionMail from '../jobs/SubscriptionMail';
+import Queue from '../../lib/Queue';
 
 class SubscriptionController {
   async index(req, res) {
@@ -96,13 +98,42 @@ class SubscriptionController {
     const end_date = addMonths(startDate, plan.duration);
     const price = plan.price * plan.duration;
 
-    const subscription = await Subscription.create({
+    const { id } = await Subscription.create({
       start_date: startDate,
       end_date,
       student_id,
       user_id: req.userId,
       plan_id,
       price,
+    });
+
+    const subscription = await Subscription.findByPk(
+      id,
+
+      {
+        attributes: ['id', 'start_date', 'end_date', 'price'],
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'name'],
+          },
+          {
+            model: Plan,
+            as: 'plan',
+            attributes: ['id', 'title'],
+          },
+          {
+            model: Student,
+            as: 'student',
+            attributes: ['id', 'name', 'email'],
+          },
+        ],
+      }
+    );
+
+    await Queue.add(SubscriptionMail.key, {
+      subscription,
     });
 
     return res.json(subscription);
