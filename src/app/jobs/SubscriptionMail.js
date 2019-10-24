@@ -20,8 +20,6 @@ class SubscriptionMail {
       currency: 'USD',
     });
 
-    formatter.format(2500); /* $2,500.00 */
-
     const { subscription } = data;
     await Mail.sendMail({
       to: `${subscription.student.name}<${subscription.student.email}>`,
