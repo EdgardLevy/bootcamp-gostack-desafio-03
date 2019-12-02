@@ -14,7 +14,7 @@ class SubscriptionController {
 
     const subscriptions = await Subscription.findAll({
       order: ['start_date'],
-      attributes: ['id', 'start_date', 'end_date', 'price'],
+      attributes: ['id', 'start_date', 'end_date', 'price', 'active'],
       limit,
       offset: (page - 1) * limit,
       include: [
