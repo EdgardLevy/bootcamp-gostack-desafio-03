@@ -1,6 +1,7 @@
 // load .env config
 import 'dotenv/config';
 import express from 'express';
+import cors from 'cors';
 import routes from './routes';
 import './database';
 // create class to application for structure improvements
@@ -12,6 +13,7 @@ class App {
   }
 
   middlewares() {
+    this.server.use(cors());
     this.server.use(express.json());
   }
 
