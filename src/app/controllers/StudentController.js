@@ -51,7 +51,7 @@ class StudentController {
     const options = {};
 
     if (q) {
-      options.where = { name: { [Op.like]: `%${q}%` } };
+      options.where = { name: { [Op.iLike]: `%${q}%` } };
     }
 
     const students = await Student.findAll(options);
