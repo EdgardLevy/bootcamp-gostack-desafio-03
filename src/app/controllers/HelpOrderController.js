@@ -1,10 +1,19 @@
 import * as Yup from 'yup';
 import HelpOrder from '../models/HelpOrder';
+import totalizeRecords from '../../util/dbfunctions';
 
 class HelpOrderController {
   async index(req, res) {
-    const helpOrders = await HelpOrder.findAll({});
-    return res.json(helpOrders);
+    const { page = 1, limit = 20 } = req.query;
+
+    const options = {
+      limit,
+      offset: (page - 1) * limit,
+    };
+
+    const result = await HelpOrder.findAndCountAll(options);
+
+    return res.json(totalizeRecords(result, limit, page));
   }
 
   async store(req, res) {

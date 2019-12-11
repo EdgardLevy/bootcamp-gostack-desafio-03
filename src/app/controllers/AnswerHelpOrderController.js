@@ -3,11 +3,15 @@ import HelpOrder from '../models/HelpOrder';
 import Student from '../models/Student';
 import HelpOrderMail from '../jobs/HelpOrderMail';
 import Queue from '../../lib/Queue';
+import totalizeRecords from '../../util/dbfunctions';
 
 class AnswerHelpOrderController {
   async index(req, res) {
-    const helpOrders = await HelpOrder.findAll({
+    const { page = 1, limit = 20 } = req.query;
+
+    const options = {
       where: { answer: null },
+      limit,
       attributes: ['id', 'question', 'created_at'],
       include: [
         {
@@ -16,8 +20,12 @@ class AnswerHelpOrderController {
           attributes: ['id', 'name', 'email'],
         },
       ],
-    });
-    return res.json(helpOrders);
+      offset: (page - 1) * limit,
+    };
+
+    const result = await HelpOrder.findAndCountAll(options);
+
+    return res.json(totalizeRecords(result, limit, page));
   }
 
   async store(req, res) {

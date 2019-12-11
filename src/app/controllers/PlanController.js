@@ -1,13 +1,26 @@
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import Plan from '../models/Plan';
+import totalizeRecords from '../../util/dbfunctions';
 
 class PlanController {
   async index(req, res) {
-    const plans = await Plan.findAll({
+    const { page = 1, limit = 20, q } = req.query;
+
+    const options = {
+      order: ['title'],
+      limit,
+      offset: (page - 1) * limit,
       attributes: { exclude: ['created_at', 'updated_at'] },
-    });
-    return res.json(plans);
+    };
+
+    if (q) {
+      options.where = { title: { [Op.iLike]: `%${q}%` } };
+    }
+
+    const result = await Plan.findAndCountAll(options);
+
+    return res.json(totalizeRecords(result, limit, page));
   }
 
   async show(req, res) {
@@ -109,9 +122,12 @@ class PlanController {
     if (!plan) {
       return res.status(400).json({ error: 'Plan does not exists' });
     }
-
-    await Plan.destroy({ where: { id } });
-    return res.send();
+    try {
+      await Plan.destroy({ where: { id } });
+      return res.send();
+    } catch (error) {
+      return res.status(403).json({ error: 'Plan has students associated' });
+    }
   }
 }
 

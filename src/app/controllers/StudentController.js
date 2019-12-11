@@ -2,6 +2,8 @@ import { Op } from 'sequelize';
 import * as Yup from 'yup';
 import Student from '../models/Student';
 
+import totalizeRecords from '../../util/dbfunctions';
+
 class StudentController {
   async store(req, res) {
     const schema = Yup.object().shape({
@@ -46,16 +48,21 @@ class StudentController {
   }
 
   async index(req, res) {
-    const { q } = req.query;
+    const { page = 1, limit = 20, q } = req.query;
 
-    const options = {};
+    const options = {
+      order: ['name'],
+      limit,
+      offset: (page - 1) * limit,
+    };
 
     if (q) {
       options.where = { name: { [Op.iLike]: `%${q}%` } };
     }
 
-    const students = await Student.findAll(options);
-    return res.json(students);
+    const result = await Student.findAndCountAll(options);
+
+    return res.json(totalizeRecords(result, limit, page));
   }
 
   async show(req, res) {

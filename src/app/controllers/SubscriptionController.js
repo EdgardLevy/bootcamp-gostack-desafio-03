@@ -1,4 +1,4 @@
-import { isBefore, addMonths, parseISO } from 'date-fns';
+import { isBefore, addMonths, parseISO, startOfDay } from 'date-fns';
 import * as Yup from 'yup';
 import Subscription from '../models/Subscription';
 import User from '../models/User';
@@ -6,13 +6,13 @@ import Plan from '../models/Plan';
 import Student from '../models/Student';
 import SubscriptionMail from '../jobs/SubscriptionMail';
 import Queue from '../../lib/Queue';
+import totalizeRecords from '../../util/dbfunctions';
 
 class SubscriptionController {
   async index(req, res) {
-    const { page = 1 } = req.query;
-    const limit = 20; // total records per page
+    const { page = 1, limit = 20 } = req.query;
 
-    const subscriptions = await Subscription.findAll({
+    const options = {
       order: ['start_date'],
       attributes: ['id', 'start_date', 'end_date', 'price', 'active'],
       limit,
@@ -34,9 +34,15 @@ class SubscriptionController {
           attributes: ['id', 'name', 'email'],
         },
       ],
-    });
+    };
 
-    return res.json(subscriptions);
+    // if (q) {
+    //   options.where = { name: { [Op.iLike]: `%${q}%` } };
+    // }
+
+    const result = await Subscription.findAndCountAll(options);
+
+    return res.json(totalizeRecords(result, limit, page));
   }
 
   async show(req, res) {
@@ -91,7 +97,7 @@ class SubscriptionController {
 
     const startDate = parseISO(start_date);
 
-    if (isBefore(startDate, new Date())) {
+    if (isBefore(startOfDay(startDate), startOfDay(new Date()))) {
       return res.status(400).json({ error: 'Past dates are not permitted' });
     }
 
