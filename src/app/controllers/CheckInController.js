@@ -2,6 +2,7 @@ import { subDays } from 'date-fns';
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
 import CheckIn from '../models/CheckIn';
+import Student from '../models/Student';
 
 class CheckInController {
   async index(req, res) {
@@ -16,7 +17,7 @@ class CheckInController {
       return res.status(400).json({ errors: error.errors });
     }
 
-    const checkStudentExists = await CheckIn.findByPk(student_id);
+    const checkStudentExists = await Student.findByPk(student_id);
 
     if (!checkStudentExists) {
       return res.status(400).json({ error: 'Student does not exists' });
@@ -38,7 +39,7 @@ class CheckInController {
       return res.status(400).json({ errors: error.errors });
     }
 
-    const checkStudentExists = await CheckIn.findByPk(student_id);
+    const checkStudentExists = await Student.findByPk(student_id);
 
     if (!checkStudentExists) {
       return res.status(400).json({ error: 'Student does not exists' });
