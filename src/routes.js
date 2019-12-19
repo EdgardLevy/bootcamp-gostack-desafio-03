@@ -13,18 +13,19 @@ const routes = new Router();
 
 routes.post('/sessions', SessionController.store);
 
-// global usage of authMiddleware
+routes.get('/students/:id', StudentController.show);
+routes.get('/students/:student_id/checkins', CheckInController.index);
+routes.post('/students/:student_id/checkins', CheckInController.store);
+routes.post('/students/:student_id/help-orders', HelpOrderController.store);
+routes.get('/students/:student_id/help-orders', HelpOrderController.index); // global usage of authMiddleware
+
 routes.use(authMiddleware); // after this, all others routes above will be protected
 
 routes.post('/students', StudentController.store);
 routes.get('/students', StudentController.index);
-routes.get('/students/:id', StudentController.show);
+
 routes.put('/students/:id', StudentController.update);
 routes.delete('/students/:id', StudentController.delete);
-routes.post('/students/:student_id/checkins', CheckInController.store);
-routes.get('/students/:student_id/checkins', CheckInController.index);
-routes.post('/students/:student_id/help-orders', HelpOrderController.store);
-routes.get('/students/:student_id/help-orders', HelpOrderController.index);
 
 routes.post('/plans', PlanController.store);
 routes.get('/plans', PlanController.index);
