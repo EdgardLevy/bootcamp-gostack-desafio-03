@@ -58,7 +58,7 @@ class CheckInController {
 
     if (totalCheckinsInLast7Days >= 5) {
       return res
-        .status(403)
+        .status(400)
         .json({ error: 'Maximum numbers of entries in last 7 days reached' });
     }
 
