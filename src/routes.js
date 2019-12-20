@@ -1,12 +1,13 @@
 // const { Router } = require('express');
 import Router from 'express';
+
+import AnswerHelpOrderController from './app/controllers/AnswerHelpOrderController';
+import CheckInController from './app/controllers/CheckInController';
+import HelpOrderController from './app/controllers/HelpOrderController';
+import PlanController from './app/controllers/PlanController';
 import SessionController from './app/controllers/SessionController';
 import StudentController from './app/controllers/StudentController';
-import CheckInController from './app/controllers/CheckInController';
-import PlanController from './app/controllers/PlanController';
 import SubscriptionController from './app/controllers/SubscriptionController';
-import HelpOrderController from './app/controllers/HelpOrderController';
-import AnswerHelpOrderController from './app/controllers/AnswerHelpOrderController';
 import authMiddleware from './app/middlewares/auth';
 
 const routes = new Router();

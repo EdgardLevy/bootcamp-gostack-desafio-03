@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
-import HelpOrder from '../models/HelpOrder';
+
 import totalizeRecords from '../../util/dbfunctions';
+import HelpOrder from '../models/HelpOrder';
 
 class HelpOrderController {
   async index(req, res) {

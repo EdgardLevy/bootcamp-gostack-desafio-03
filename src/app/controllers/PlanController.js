@@ -1,7 +1,8 @@
-import * as Yup from 'yup';
 import { Op } from 'sequelize';
-import Plan from '../models/Plan';
+import * as Yup from 'yup';
+
 import totalizeRecords from '../../util/dbfunctions';
+import Plan from '../models/Plan';
 
 class PlanController {
   async index(req, res) {

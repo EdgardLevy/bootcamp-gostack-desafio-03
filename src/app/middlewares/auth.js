@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 // this node default mode allow to use functions with callback in promises
 import { promisify } from 'util';
+
 import authConfig from '../../config/auth';
 
 export default async (req, res, next) => {

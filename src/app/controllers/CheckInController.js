@@ -1,6 +1,7 @@
 import { subDays } from 'date-fns';
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
+
 import CheckIn from '../models/CheckIn';
 import Student from '../models/Student';
 

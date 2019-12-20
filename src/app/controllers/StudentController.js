@@ -1,8 +1,8 @@
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
-import Student from '../models/Student';
 
 import totalizeRecords from '../../util/dbfunctions';
+import Student from '../models/Student';
 
 class StudentController {
   async store(req, res) {

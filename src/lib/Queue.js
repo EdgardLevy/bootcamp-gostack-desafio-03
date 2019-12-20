@@ -1,7 +1,8 @@
 // modulo para criacao de filas de background jobs
 import Bee from 'bee-queue';
-import SubscriptionMail from '../app/jobs/SubscriptionMail';
+
 import HelpOrderMail from '../app/jobs/HelpOrderMail';
+import SubscriptionMail from '../app/jobs/SubscriptionMail';
 import redisConfig from '../config/redis';
 
 const jobs = [SubscriptionMail, HelpOrderMail];

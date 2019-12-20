@@ -1,12 +1,13 @@
 import { isBefore, addMonths, parseISO, startOfDay } from 'date-fns';
 import * as Yup from 'yup';
-import Subscription from '../models/Subscription';
-import User from '../models/User';
-import Plan from '../models/Plan';
-import Student from '../models/Student';
-import SubscriptionMail from '../jobs/SubscriptionMail';
+
 import Queue from '../../lib/Queue';
 import totalizeRecords from '../../util/dbfunctions';
+import SubscriptionMail from '../jobs/SubscriptionMail';
+import Plan from '../models/Plan';
+import Student from '../models/Student';
+import Subscription from '../models/Subscription';
+import User from '../models/User';
 
 class SubscriptionController {
   async index(req, res) {

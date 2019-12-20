@@ -1,9 +1,10 @@
 import * as Yup from 'yup';
-import HelpOrder from '../models/HelpOrder';
-import Student from '../models/Student';
-import HelpOrderMail from '../jobs/HelpOrderMail';
+
 import Queue from '../../lib/Queue';
 import totalizeRecords from '../../util/dbfunctions';
+import HelpOrderMail from '../jobs/HelpOrderMail';
+import HelpOrder from '../models/HelpOrder';
+import Student from '../models/Student';
 
 class AnswerHelpOrderController {
   async index(req, res) {
