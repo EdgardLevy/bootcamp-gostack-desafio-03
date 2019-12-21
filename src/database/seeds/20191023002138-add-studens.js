@@ -4,7 +4,7 @@ module.exports = {
       'students',
       [
         {
-          name: 'Student A',
+          name: 'Atom Mark',
           email: 'studenta@email.com',
           age: 36,
           height: 178,
@@ -13,7 +13,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          name: 'Student B',
+          name: 'Robert Bry',
           email: 'studentb@email.com',
           age: 26,
           height: 158,
@@ -22,7 +22,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          name: 'Student C',
+          name: 'Stela Cruz',
           email: 'studentc@email.com',
           age: 16,
           height: 128,
@@ -31,7 +31,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          name: 'Student D',
+          name: 'Damion Lay',
           email: 'studentd@email.com',
           age: 38,
           height: 175,
@@ -40,7 +40,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          name: 'Student E',
+          name: 'Erick Stoner',
           email: 'studente@email.com',
           age: 28,
           height: 168,
@@ -49,7 +49,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          name: 'Student F',
+          name: 'Follman Park',
           email: 'studentf@email.com',
           age: 30,
           height: 178,
@@ -59,7 +59,7 @@ module.exports = {
         },
 
         {
-          name: 'Student G',
+          name: 'Milk Pencil',
           email: 'studentg@email.com',
           age: 26,
           height: 164,
@@ -68,7 +68,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          name: 'Student H',
+          name: 'Honor Fail',
           email: 'studenth@email.com',
           age: 46,
           height: 178,
@@ -77,7 +77,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          name: 'Student I',
+          name: 'Iuy Grate',
           email: 'studenti@email.com',
           age: 66,
           height: 168,
@@ -86,7 +86,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          name: 'Student J',
+          name: 'Jackson Bill',
           email: 'studentj@email.com',
           age: 78,
           height: 165,
@@ -95,7 +95,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          name: 'Student L',
+          name: 'Lara Camilla',
           email: 'studentl@email.com',
           age: 35,
           height: 148,
@@ -104,7 +104,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          name: 'Student M',
+          name: 'Mike B',
           email: 'studentm@email.com',
           age: 30,
           height: 148,
