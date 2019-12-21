@@ -1,4 +1,3 @@
-// const { Router } = require('express');
 import Router from 'express';
 
 import AnswerHelpOrderController from './app/controllers/AnswerHelpOrderController';
@@ -42,5 +41,5 @@ routes.delete('/subscriptions/:id', SubscriptionController.delete);
 
 routes.post('/help-orders/:id/answer', AnswerHelpOrderController.store);
 routes.get('/help-orders', AnswerHelpOrderController.index);
-// module.exports = routes;
+
 export default routes;

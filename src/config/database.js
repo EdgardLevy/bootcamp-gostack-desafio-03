@@ -15,12 +15,3 @@ module.exports = {
     updatedAt: 'updated_at',
   },
 };
-
-/*
-
-  define: {
-    timestamps = create created_at and updated_at fields
-    underscored = remove default camelcase pattern to table names
-    underscoredAllL = remove default camelcase pattern to others things
-  },
-*/

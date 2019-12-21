@@ -11,13 +11,6 @@ services:
       - POSTGRES_DB=gympoint
       - POSTGRES_PASSWORD=postgres
 
-  mongo:
-    image: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo:/data/db
-
   redis:
     image: redis:alpine
     ports:
@@ -27,5 +20,4 @@ services:
 
 volumes:
   postgres-gympoint:
-  mongo:
   redis:

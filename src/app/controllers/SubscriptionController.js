@@ -37,10 +37,6 @@ class SubscriptionController {
       ],
     };
 
-    // if (q) {
-    //   options.where = { name: { [Op.iLike]: `%${q}%` } };
-    // }
-
     const result = await Subscription.findAndCountAll(options);
 
     return res.json(totalizeRecords(result, limit, page));
